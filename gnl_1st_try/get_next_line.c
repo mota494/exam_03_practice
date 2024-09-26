@@ -105,11 +105,14 @@ char	*get_next_line(int fd)
 	char	*line;
 	int	tored;
 	int	passed = 0;
+	static	int	read_last = 0;
 
 	if (fd < 0 || BUFFER_SIZE < 0)
 		return (NULL);
 	line = malloc(1);
 	line[0] = '\0';
+	if (read_last == 1)
+		return (NULL);
 	if (buffer[0] != '\0')
 	{
 		line = get_line(line, buffer,&passed);
@@ -119,9 +122,11 @@ char	*get_next_line(int fd)
 	{
 		passed = 0;
 		tored = read(fd, buffer, BUFFER_SIZE);
-		if (tored == -1)
-			break ;
+		if (tored <= 0)
+			return (NULL);
 		line = get_line(line, buffer, &passed);
+		if (find_end(buffer) == 1)
+			read_last = 1;
 		clean_buffer(buffer, passed);
 	}
 	return (line);
@@ -131,13 +136,13 @@ int main()
 {
 	int fd = open("get_next_line.h", O_RDONLY);
 	char	*line;
-	int	i = 11;
+	int	i = 19;
 
 	while (i > 0)
 	{
 		line = get_next_line(fd);
 		printf("%s", line);
 		i--;
+		free(line);
 	}
-	free(line);
 }
