@@ -15,19 +15,6 @@ int	has_nl(char *str)
 	return (0);
 }
 
-int	find_end(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	if (i == BUFFER_SIZE)
-		return (0);
-	else
-		return (1);
-}
-
 int	ft_strlen(char *str)
 {
 	int	i;
@@ -77,10 +64,15 @@ char	*get_line(char *oldline, char *buffer, int *passed)
 
 	i = 0;
 	toret = alocpy(oldline);
-	while (buffer[i - 1] != '\n' && buffer[i])
+	while (buffer[i] != '\n' && buffer[i])
 	{
 		toret = strjoinchr(toret, buffer[i]);
 		i++;
+		*passed += 1;
+	}
+	if (buffer[i] == '\n')
+	{
+		toret = strjoinchr(toret, buffer[i]);
 		*passed += 1;
 	}
 	free(oldline);
@@ -105,14 +97,11 @@ char	*get_next_line(int fd)
 	char	*line;
 	int	tored;
 	int	passed = 0;
-	static	int	read_last = 0;
 
 	if (fd < 0 || BUFFER_SIZE < 0)
 		return (NULL);
 	line = malloc(1);
 	line[0] = '\0';
-	if (read_last == 1)
-		return (NULL);
 	if (buffer[0] != '\0')
 	{
 		line = get_line(line, buffer,&passed);
@@ -125,8 +114,7 @@ char	*get_next_line(int fd)
 		if (tored <= 0)
 			return (NULL);
 		line = get_line(line, buffer, &passed);
-		if (find_end(buffer) == 1)
-			read_last = 1;
+		buffer[tored] = '\0';
 		clean_buffer(buffer, passed);
 	}
 	return (line);
@@ -135,14 +123,11 @@ char	*get_next_line(int fd)
 int main()
 {
 	int fd = open("get_next_line.h", O_RDONLY);
-	char	*line;
-	int	i = 19;
+	char	*line;	
 
-	while (i > 0)
+	while ((line = get_next_line(fd)))
 	{
-		line = get_next_line(fd);
 		printf("%s", line);
-		i--;
 		free(line);
 	}
 }
