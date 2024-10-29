@@ -82,9 +82,7 @@ void	transport(const char	*arg, va_list str, int *count)
 				ft_puthex(va_arg(str, unsigned int), count);
 		}
 		else
-		{
 			ft_putchar(arg[i], count);
-		}
 		i++;
 	}
 }
@@ -107,5 +105,8 @@ int main()
 	int	i = __INT_MAX__;
 	int	d;
 
-	d = ft_printf("%x", i);
+	d = ft_printf("I: %x\n", i);
+	ft_printf("d: %d\n", d);
+	d = printf("I: %x\n", i);
+	printf("d: %d", d);
 }

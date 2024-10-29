@@ -3,7 +3,7 @@ NC='\033[0m'
 numtest=$(ls test/test* | wc -l)
 i=$((0))
 
-numtest=$((numtest - 2))
+numtest=$((numtest - 1))
 
 cc get_next_line.c main.c
 
