@@ -104,7 +104,7 @@ char	*get_next_line(int fd)
 	line[0] = '\0';
 	if (buffer[0] != '\0')
 	{
-		line = get_line(line, buffer,&passed);
+		line = get_line(line, buffer, &passed);
 		clean_buffer(buffer, passed);
 	}
 	while (has_nl(line) == 0)
