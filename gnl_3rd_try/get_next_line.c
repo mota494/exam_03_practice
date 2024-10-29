@@ -113,18 +113,3 @@ char	*get_next_line(int fd)
 	}
 	return (toret);
 }
-
-int main()
-{
-	char *line;
-	int	fd;
-	
-	fd = open("test", 0);
-	
-	while ((line = get_next_line(fd)))
-	{
-		printf("%s", line);
-		free(line);
-	}
-	return (0);
-}
